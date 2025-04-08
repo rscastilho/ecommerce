@@ -13,6 +13,8 @@ namespace ecomm.Data.Functions.UserFunctions
         Task<Usermodel> getUserById(int id);
         Task<Usermodel> getUserByEmail(string email);
 
+        Task<Usermodel> Login(string email,  string password);
+
 
 
 

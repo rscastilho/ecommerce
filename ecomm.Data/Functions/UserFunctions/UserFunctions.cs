@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using ecomm.Data.Queries;
+using ecomm.Data.Validations;
 using ecomm.Domain.Interfaces;
 using ecomm.Domain.Models;
 using System;
@@ -24,12 +25,14 @@ namespace ecomm.Data.Functions.UserFunctions
             try
             {
                 UserQueries query = new();
+                HashPassword hash = new();
                 var parameters = new DynamicParameters();
-                parameters.Add("@createdat", DateTime.Now.ToString("yyyy-MM-dd"));
+                parameters.Add("@createdat", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 parameters.Add("@name", user.Name);
                 parameters.Add("@email", user.Email);
-                parameters.Add("@password", user.Password);
-                parameters.Add("@passwordConfirm", user.PasswordConfirm);
+                string passwordHash = hash.HasherPassword(user.Password); 
+                parameters.Add("@password", passwordHash);
+                
                 var result = await _userRepository.AddAsync(parameters, query.add());
                 return result;
 
@@ -81,6 +84,24 @@ namespace ecomm.Data.Functions.UserFunctions
                 return result;
             } catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public async Task<UserModel> Login(string email, string password)
+        {
+            try
+            {
+                UserQueries query = new();
+                var parameters = new DynamicParameters();
+                parameters.Add("@email", email.ToString());
+                UserModel result = await _userRepository.GetByIdAsync(parameters, query.byEmail());
+                
+                return result;
+
+            } catch (Exception)
+            {
+
                 throw;
             }
         }

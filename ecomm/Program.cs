@@ -15,15 +15,9 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddScoped<IRepositoryGeneric<UserModel>, RepositoryGeneric<UserModel>>();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-
 builder.Services.AddScoped<IUserService, UserServices>();
-
 builder.Services.AddScoped<IUserFunctions<UserModel>, UserFunctions>();
-
-
 
 var app = builder.Build();
 

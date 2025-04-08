@@ -1,4 +1,5 @@
 ﻿using ecomm.Data.Functions.UserFunctions;
+using ecomm.Data.Validations;
 using ecomm.Domain.IServices;
 using ecomm.Domain.Models;
 using System;
@@ -25,7 +26,7 @@ namespace ecomm.Services.Services
             {
                 ResponseModel<UserModel> response = new();
 
-                if(user == null)
+                if(user is null)
                 {
                     response.Data = null;
                     response.Message = "Preencha todos os campos obrigatórios";
@@ -33,7 +34,7 @@ namespace ecomm.Services.Services
                 }
 
                 var userExist = await _userFunction.getUserByEmail(user.Email);
-                if (userExist != null)
+                if (userExist is not null)
                 {
                     response.Message = $"{user.Email} email já cadastrado";
                     response.Data = userExist;
@@ -77,6 +78,42 @@ namespace ecomm.Services.Services
                 response.Data = result;
                 response.Message = $"{result.Count()} registros encontrados";
                 return response;
+            } catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<ResponseModel<UserModel>> Login(UserModel user)
+        {
+            try
+            {
+                ResponseModel<UserModel> response = new();
+                var result = await _userFunction.Login(user.Email, user.Password);
+
+                if(result is null)
+                {
+                    response.Data =null;
+                    response.Message = $"usuário {user.Name} não cadastrado";
+                    return response;
+                }
+
+                ValidaPassword checkpassword = new();
+                bool validaSenha = checkpassword.ComparePassword(user.Password, result.Password);
+                if (!validaSenha)
+                {
+                    response.Message = $"Senha incorreta, tente novamente";
+                    return response;
+                    
+                }
+
+                response.Data = result;
+                response.Message = $"{result.Name} logado com sucesso!";
+                return response;
+
+
+
             } catch (Exception)
             {
 

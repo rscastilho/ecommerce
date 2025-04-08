@@ -11,7 +11,9 @@ namespace ecomm.Domain.IServices
     {
         Task<ResponseModel<List<UserModel>>> GetAllUsers();
         Task<ResponseModel<UserModel>> addUser(UserModel user);
-        
+        Task<ResponseModel<UserModel>> Login(UserModel user);
+
+
 
     }
 }

@@ -31,5 +31,12 @@ namespace ecomm.Controllers
 
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> login (UserModel user)
+        {
+            var result = await _userService.Login(user);
+            return Ok(result);
+        }
+
     }
 }
