@@ -2,6 +2,7 @@
 using ecomm.Data.Validations;
 using ecomm.Domain.IServices;
 using ecomm.Domain.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace ecomm.Services.Services
     public class UserServices : IUserService
     {
         private readonly IUserFunctions<UserModel> _userFunction;
+        private readonly IConfiguration _configuration;
         
 
-        public UserServices(IUserFunctions<UserModel> userFunction)
+        public UserServices(IUserFunctions<UserModel> userFunction, IConfiguration configuration)
         {
             _userFunction = userFunction;
+            _configuration = configuration;
         }
 
         public async Task<ResponseModel<UserModel>> addUser(UserModel user)
@@ -108,8 +111,15 @@ namespace ecomm.Services.Services
                     
                 }
 
+                createToken gerar = new();
+                var token = gerar.generateToken(user);
+
+
+                
+
+
                 response.Data = result;
-                response.Message = $"{result.Name} logado com sucesso!";
+                response.Message = $"token: {token}";
                 return response;
 
 
