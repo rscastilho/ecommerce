@@ -1,5 +1,6 @@
 ﻿using ecomm.Domain.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,10 @@ namespace ecomm.Data.Validations
 {
     public class createToken
     {
-
-   
-
-        public string generateToken(UserModel user)
+        public string generateToken(UserModel user, string secretKey)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("abcd12345678efghij1234567klmnop12345678qrstuvyxz12345678@$%&");
+            var key = Encoding.UTF8.GetBytes(secretKey);
             var tokenDecriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] {
@@ -31,9 +29,6 @@ namespace ecomm.Data.Validations
             };
             var token = tokenHandler.CreateToken(tokenDecriptor);
             return tokenHandler.WriteToken(token);
-
-
-
         }
     }
 }

@@ -15,12 +15,13 @@ namespace ecomm.Services.Services
     {
         private readonly IUserFunctions<UserModel> _userFunction;
         private readonly IConfiguration _configuration;
-        
+                
 
         public UserServices(IUserFunctions<UserModel> userFunction, IConfiguration configuration)
         {
             _userFunction = userFunction;
             _configuration = configuration;
+        
         }
 
         public async Task<ResponseModel<UserModel>> addUser(UserModel user)
@@ -112,16 +113,11 @@ namespace ecomm.Services.Services
                 }
 
                 createToken gerar = new();
-                var token = gerar.generateToken(user);
-
-
+                var token = gerar.generateToken(user, _configuration["secretKey"]);
                 
-
-
                 response.Data = result;
                 response.Message = $"token: {token}";
                 return response;
-
 
 
             } catch (Exception)
