@@ -33,7 +33,7 @@ namespace ecomm.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> login (UserModel user)
+        public async Task<IActionResult> login (UserLoginDto user)
         {
             var result = await _userService.Login(user);
             return Ok(result);

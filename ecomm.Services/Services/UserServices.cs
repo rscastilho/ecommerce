@@ -74,19 +74,20 @@ namespace ecomm.Services.Services
             }
         }
 
-        public async Task<ResponseModel<List<UserModel>>> GetAllUsers()
+        public async Task<ResponseModel<List<UserGetAllDto>>> GetAllUsers()
         {
             try
             {
-                ResponseModel<List<UserModel>> response = new();
+                ResponseModel<List<UserGetAllDto>> response = new();
                 var result = await _userFunction.GetAllUsers();
+                var usersMap = _mapper.Map<List<UserGetAllDto>>(result);
                 if (result.Count == 0)
                 {
                     response.Data = null;
                     response.Message = "Nenhum usuário encontrado";
                     return response;
                 }
-                response.Data = result;
+                response.Data = usersMap;   
                 response.Message = $"{result.Count()} registros encontrados";
                 return response;
             } catch (Exception)
@@ -96,17 +97,19 @@ namespace ecomm.Services.Services
             }
         }
 
-        public async Task<ResponseModel<UserModel>> Login(UserModel user)
+        public async Task<ResponseModel<UserLogonDto>> Login(UserLoginDto user)
         {
             try
             {
-                ResponseModel<UserModel> response = new();
+                ResponseModel<UserLogonDto> response = new();
+                
+                var userMap = _mapper.Map<UserModel>(user);
                 var result = await _userFunction.Login(user.Email, user.Password);
 
                 if(result is null)
                 {
                     response.Data =null;
-                    response.Message = $"usuário {user.Name} não cadastrado";
+                    response.Message = $"usuário {userMap.Name} não cadastrado";
                     return response;
                 }
 
@@ -120,9 +123,12 @@ namespace ecomm.Services.Services
                 }
 
                 createToken gerar = new();
-                var token = gerar.generateToken(user, _configuration["secretKey"]);
+                var token = gerar.generateToken(userMap, _configuration["secretKey"]);
+
                 
-                response.Data = result;
+                var userMapReverse = _mapper.Map<UserLogonDto>(result);
+                                                
+                response.Data = userMapReverse;
                 response.Message = $"token: {token}";
                 return response;
 

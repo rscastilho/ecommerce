@@ -10,9 +10,9 @@ namespace ecomm.Domain.IServices
 {
     public interface IUserService
     {
-        Task<ResponseModel<List<UserModel>>> GetAllUsers();
+        Task<ResponseModel<List<UserGetAllDto>>> GetAllUsers();
         Task<ResponseModel<UserAddDto>> addUser(UserAddDto user);
-        Task<ResponseModel<UserModel>> Login(UserModel user);
+        Task<ResponseModel<UserLogonDto>> Login(UserLoginDto user);
 
 
 

@@ -14,6 +14,9 @@ namespace ecomm.Crosscutting
         public DtoMapper()
         {
             CreateMap<UserAddDto, UserModel>().ReverseMap();
+            CreateMap<UserGetAllDto, UserModel>().ReverseMap();
+            CreateMap<UserLoginDto, UserModel>().ReverseMap();
+            CreateMap<UserLogonDto, UserModel>().ReverseMap();
 
         }
 
