@@ -1,3 +1,5 @@
+using AutoMapper;
+using ecomm.Crosscutting;
 using ecomm.Data.Functions.UserFunctions;
 using ecomm.Data.Repositories;
 using ecomm.Domain.Interfaces;
@@ -24,6 +26,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IUserFunctions<UserModel>, UserFunctions>();
 
+builder.Services.AddAutoMapper(typeof(DtoMapper));
+
+
 
 builder.Services.AddAuthentication(x =>
 {
@@ -41,6 +46,9 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = true
     };
 });
+
+
+
 
 var app = builder.Build();
 

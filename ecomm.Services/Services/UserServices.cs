@@ -1,5 +1,7 @@
-﻿using ecomm.Data.Functions.UserFunctions;
+﻿using AutoMapper;
+using ecomm.Data.Functions.UserFunctions;
 using ecomm.Data.Validations;
+using ecomm.Domain.Dtos.User;
 using ecomm.Domain.IServices;
 using ecomm.Domain.Models;
 using Microsoft.Extensions.Configuration;
@@ -15,20 +17,23 @@ namespace ecomm.Services.Services
     {
         private readonly IUserFunctions<UserModel> _userFunction;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
                 
 
-        public UserServices(IUserFunctions<UserModel> userFunction, IConfiguration configuration)
+        public UserServices(IUserFunctions<UserModel> userFunction, IConfiguration configuration, IMapper mapper)
         {
             _userFunction = userFunction;
             _configuration = configuration;
+            _mapper = mapper;
         
         }
 
-        public async Task<ResponseModel<UserModel>> addUser(UserModel user)
+        public async Task<ResponseModel<UserAddDto>> addUser(UserAddDto user)
         {
             try
             {
-                ResponseModel<UserModel> response = new();
+                ResponseModel<UserAddDto> response = new();
+
 
                 if(user is null)
                 {
@@ -37,15 +42,17 @@ namespace ecomm.Services.Services
                     return response;
                 }
 
+                var userMap = _mapper.Map<UserModel>(user);
                 var userExist = await _userFunction.getUserByEmail(user.Email);
                 if (userExist is not null)
                 {
                     response.Message = $"{user.Email} email já cadastrado";
-                    response.Data = userExist;
+                    response.Data = user;
                     return response;
                 }
 
-                var result = await _userFunction.addUser(user);
+
+                var result = await _userFunction.addUser(userMap);
                 if(result == null)
                 {
                     response.Data = null;
@@ -53,9 +60,9 @@ namespace ecomm.Services.Services
                     return response;
                 }
 
-
+                var userEmailMap = _mapper.Map<UserAddDto>(user);
                 var userByEmail = await _userFunction.getUserById(result);
-                response.Data = userByEmail;
+                response.Data = userEmailMap;
                 response.Message = $"{userByEmail.Name} cadastrado com sucesso!";
                 return response;
 

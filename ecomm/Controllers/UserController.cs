@@ -1,4 +1,5 @@
-﻿using ecomm.Domain.IServices;
+﻿using ecomm.Domain.Dtos.User;
+using ecomm.Domain.IServices;
 using ecomm.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace ecomm.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> addUser(UserModel user)
+        public async Task<IActionResult> addUser(UserAddDto user)
         {
             var result = await _userService.addUser(user);
             return Ok(result);

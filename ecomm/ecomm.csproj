@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ecomm.Crosscutting\ecomm.Crosscutting.csproj" />
     <ProjectReference Include="..\ecomm.Data\ecomm.Data.csproj" />
     <ProjectReference Include="..\ecomm.Domain\ecomm.Domain.csproj" />
     <ProjectReference Include="..\ecomm.Services\ecomm.Services.csproj" />
