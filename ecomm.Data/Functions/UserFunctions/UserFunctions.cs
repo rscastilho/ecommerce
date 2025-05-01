@@ -94,6 +94,7 @@ namespace ecomm.Data.Functions.UserFunctions
             {
                 UserQueries query = new();
                 var parameters = new DynamicParameters();
+                
                 parameters.Add("@email", email.ToString());
                 UserModel result = await _userRepository.GetByIdAsync(parameters, query.byEmail());
                 

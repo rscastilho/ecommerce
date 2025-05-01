@@ -1,6 +1,7 @@
 ﻿using ecomm.Domain.Dtos.User;
 using ecomm.Domain.IServices;
 using ecomm.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace ecomm.Controllers
             _userService = userService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> getAll()
         {
